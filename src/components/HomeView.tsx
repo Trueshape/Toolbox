@@ -5,7 +5,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { CategoryEditForm } from "./CategoryEditForm";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Button } from "@/components/ui/button";
@@ -183,9 +182,9 @@ export function HomeView({ catalog }: { catalog: Catalog }) {
             <Button variant="outline" className="add-btn sub" onClick={() => setSiteDialog({ site: null })}>
               ＋ Sito
             </Button>
-            <Link href="/impostazioni" className="add-btn sub inline-flex h-8 items-center justify-center rounded-lg border border-border px-2.5 text-sm text-muted-foreground hover:text-foreground">
+            <a href={import.meta.env.BASE_URL + "impostazioni"} className="add-btn sub inline-flex h-8 items-center justify-center rounded-lg border border-border px-2.5 text-sm text-muted-foreground hover:text-foreground">
               ⚙ Impostazioni
-            </Link>
+            </a>
           </>
         )}
       </nav>

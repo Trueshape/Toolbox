@@ -344,3 +344,5 @@ a { color: inherit; text-decoration: none; }
 .tile.txt-bottom .tile-body { order: 2; margin-top: auto; }
 .tile.txt-left { align-items: flex-start; text-align: left; }
 .tile.txt-right { align-items: flex-end; text-align: right; }
+
+:root { --font-sans: "Geist Variable", system-ui, sans-serif; }

@@ -2,7 +2,6 @@
 
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { SiteTile } from "@/components/SiteTile";
 import { Button } from "@/components/ui/button";
@@ -51,7 +50,7 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
       <form onSubmit={save} className="flex min-w-[280px] flex-1 flex-col gap-5">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold">Impostazioni</h1>
-          <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">← Torna al sito</Link>
+          <a href={import.meta.env.BASE_URL} className="text-sm text-muted-foreground hover:text-foreground">← Torna al sito</a>
         </div>
 
         <div className="flex flex-col gap-2">

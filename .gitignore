@@ -6,3 +6,7 @@ next-env.d.ts
 *.tsbuildinfo
 data/backups/
 data/*.tmp
+dist/
+devlog.txt
+batlog*.txt
+bat-test.txt

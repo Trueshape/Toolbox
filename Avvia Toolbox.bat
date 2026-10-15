@@ -22,4 +22,4 @@ if not exist node_modules (
 
 start "" powershell -NoProfile -WindowStyle Hidden -Command "$u='http://localhost:3100/'; for($i=0;$i -lt 120;$i++){ try { Invoke-WebRequest -Uri $u -UseBasicParsing -TimeoutSec 30 | Out-Null; Start-Process $u; break } catch { Start-Sleep -Milliseconds 500 } }"
 echo Toolbox su http://localhost:3100 - chiudi questa finestra per fermarlo.
-call npm run dev -- -p 3100
+call npm run dev

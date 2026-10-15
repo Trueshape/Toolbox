@@ -1,33 +1,36 @@
 {
-  "name": "toolbox",
+  "name": "toolbox-vite",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "build:pages": "cross-env VITE_READ_ONLY=1 tsc --noEmit && cross-env VITE_READ_ONLY=1 vite build",
+    "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
+    "@fontsource-variable/geist": "^5.2.5",
     "class-variance-authority": "^0.7.1",
-    "cn": "^0.4.0",
+    "clsx": "^2.1.1",
     "lucide-react": "^1.56.0",
-    "next": "15.5.27",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "shadcn": "^4.21.4",
+    "tailwind-merge": "^3.0.2",
     "tw-animate-css": "^1.4.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.1.11",
     "@types/node": "22.10.5",
     "@types/react": "19.0.6",
     "@types/react-dom": "19.0.2",
-    "tailwindcss": "^4.3.3",
-    "typescript": "5.7.2"
-  },
-  "overrides": {
-    "postcss": "8.5.28"
+    "@vitejs/plugin-react": "^4.5.0",
+    "cross-env": "^7.0.3",
+    "tailwindcss": "^4.1.11",
+    "typescript": "5.7.2",
+    "vite": "^6.3.5"
   }
 }

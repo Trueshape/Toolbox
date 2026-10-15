@@ -21,15 +21,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # le route /api non esistono nella build statica: la versione pubblica è di sola lettura
-      - run: rm -rf src/app/api
-      - run: npm run build
-        env:
-          NEXT_PUBLIC_READ_ONLY: "1"
-          NEXT_PUBLIC_BASE_PATH: "/Toolbox"
+      - run: npm run build:pages
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./dist
   deploy:
     needs: build
     runs-on: ubuntu-latest
