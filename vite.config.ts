@@ -8,7 +8,7 @@ import { toolboxApi } from "./server/api";
 const readOnly = process.env.VITE_READ_ONLY === "1";
 
 export default defineConfig({
-  base: readOnly ? "/Toolbox-Vite/" : "/",
+  base: readOnly ? "/Toolbox/" : "/",
   plugins: [react(), tailwindcss(), toolboxApi()],
   resolve: {
     alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
