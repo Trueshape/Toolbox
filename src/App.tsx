@@ -22,7 +22,7 @@ export default function App() {
 
   if (onSettings) {
     if (READ_ONLY) return <p className="p-6 text-muted-foreground">Pagina non disponibile.</p>;
-    return catalog ? <SettingsForm initial={{ ...DEFAULT_SETTINGS, ...catalog.settings }} /> : <p className="p-6">Caricamento…</p>;
+    return catalog ? <SettingsForm initial={{ ...DEFAULT_SETTINGS, ...catalog.settings }} categories={catalog.categories} /> : <p className="p-6">Caricamento…</p>;
   }
   if (!catalog) return <p className="p-6 text-muted-foreground">{error || "Caricamento…"}</p>;
   return <HomeView catalog={catalog} />;

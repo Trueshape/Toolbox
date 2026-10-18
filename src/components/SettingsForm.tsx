@@ -3,6 +3,7 @@
 "use client";
 
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 import { SiteTile } from "@/components/SiteTile";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -20,8 +21,10 @@ const SAMPLE_SITE: Site = {
   pinned: true,
 };
 
-export function SettingsForm({ initial }: { initial: SiteSettings }) {
+export function SettingsForm({ initial, categories: initialCategories }: { initial: SiteSettings; categories: CategoryInfo[] }) {
   const [placement, setPlacement] = useState<Placement>(initial.placement);
+  const [categories, setCategories] = useState<CategoryInfo[]>(initialCategories);
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -45,6 +48,27 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
     }
   }
 
+  // rinomina una categoria: il server aggiorna anche tutti i siti che la usano
+  async function renameCategory(oldName: string) {
+    const newName = (drafts[oldName] ?? oldName).trim();
+    if (!newName || newName === oldName) return;
+    setMessage("");
+    try {
+      const res = await fetch("/api/categories/" + encodeURIComponent(oldName), {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newName }),
+      });
+      const data = (await res.json()) as CategoryInfo & { error?: string };
+      if (!res.ok) throw new Error(data.error || "HTTP " + res.status);
+      setCategories((list) => list.map((c) => (c.name === oldName ? data : c)));
+      setDrafts((d) => { const next = { ...d }; delete next[oldName]; return next; });
+      setMessage("Categoria rinominata in \"" + data.name + "\".");
+    } catch (err) {
+      setMessage("Non rinominata: " + (err instanceof Error ? err.message : "errore sconosciuto"));
+    }
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-wrap gap-8 p-6">
       <form onSubmit={save} className="flex min-w-[280px] flex-1 flex-col gap-5">
@@ -64,6 +88,21 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
               </button>
             ))}
           </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label>Categorie</Label>
+          {categories.map((c) => {
+            const value = drafts[c.name] ?? c.name;
+            return (
+              <div key={c.name} className="flex gap-2">
+                <Input value={value} maxLength={30} aria-label={"Nome di " + c.name}
+                  onChange={(e) => setDrafts((d) => ({ ...d, [c.name]: e.target.value }))}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); renameCategory(c.name); } }} />
+                <Button type="button" variant="outline" disabled={value.trim() === c.name || !value.trim()} onClick={() => renameCategory(c.name)}>Rinomina</Button>
+              </div>
+            );
+          })}
         </div>
 
         <div className="flex items-center gap-3">
