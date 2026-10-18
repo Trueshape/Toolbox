@@ -25,6 +25,7 @@ export function SettingsForm({ initial, categories: initialCategories }: { initi
   const [placement, setPlacement] = useState<Placement>(initial.placement);
   const [categories, setCategories] = useState<CategoryInfo[]>(initialCategories);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [newName, setNewName] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -69,6 +70,27 @@ export function SettingsForm({ initial, categories: initialCategories }: { initi
     }
   }
 
+  // crea una nuova categoria (icona e colore predefiniti dal server)
+  async function addCategory() {
+    const name = newName.trim();
+    if (!name) return;
+    setMessage("");
+    try {
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      const data = (await res.json()) as CategoryInfo & { error?: string };
+      if (!res.ok) throw new Error(data.error || "HTTP " + res.status);
+      setCategories((list) => [...list, data]);
+      setNewName("");
+      setMessage("Categoria \"" + data.name + "\" creata.");
+    } catch (err) {
+      setMessage("Non creata: " + (err instanceof Error ? err.message : "errore sconosciuto"));
+    }
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-wrap gap-8 p-6">
       <form onSubmit={save} className="flex min-w-[280px] flex-1 flex-col gap-5">
@@ -103,6 +125,12 @@ export function SettingsForm({ initial, categories: initialCategories }: { initi
               </div>
             );
           })}
+          <div className="flex gap-2">
+            <Input value={newName} maxLength={30} placeholder="Nuova categoria" aria-label="Nome nuova categoria"
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCategory(); } }} />
+            <Button type="button" variant="outline" disabled={!newName.trim()} onClick={addCategory}>Aggiungi</Button>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
