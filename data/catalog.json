@@ -172,8 +172,8 @@
     },
     {
       "id": "radio-group",
-      "nome": "Radio Group",
-      "url": "https://shoelace.style/components",
+      "nome": "Shoelace",
+      "url": "https://shoelace.style/",
       "categorie": [
         "Components"
       ],
