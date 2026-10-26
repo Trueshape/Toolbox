@@ -20,6 +20,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { READ_ONLY } from "@/lib/mode";
+import { exportLinks } from "@/lib/exportLinks";
 import { DEFAULT_SETTINGS } from "@/lib/settings";
 import type { Catalog, CategoryInfo, Site } from "@/types";
 import { CategoryForm } from "./CategoryForm";
@@ -173,6 +174,11 @@ export function HomeView({ catalog }: { catalog: Catalog }) {
               </ContextMenuContent>
             </ContextMenu>
           ),
+        )}
+        {READ_ONLY && (
+          <Button variant="outline" className="add-btn sub" onClick={() => exportLinks(categories, sites)}>
+            ⤓ Esporta .md
+          </Button>
         )}
         {!READ_ONLY && (
           <>
