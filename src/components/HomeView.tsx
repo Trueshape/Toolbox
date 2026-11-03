@@ -131,8 +131,10 @@ export function HomeView({ catalog }: { catalog: Catalog }) {
   const visible = sites
     .filter((s) => filter === ALL || s.categorie.includes(filter))
     .filter((s) => !q || [s.nome, s.descrizione, s.url, ...s.categorie].join(" ").toLowerCase().includes(q))
-    // pinnati prima, così le tile grandi stanno in alto
-    .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+    // pinnati prima; poi per nome, oppure dall'ultimo aggiunto (in fondo all'array)
+    .sort((a, b) => Number(b.pinned) - Number(a.pinned) || (settings.siteOrder === "name"
+      ? a.nome.localeCompare(b.nome, "it", { sensitivity: "base" })
+      : sites.indexOf(b) - sites.indexOf(a)));
 
   const countFor = (name: string) =>
     name === ALL ? sites.length : sites.filter((s) => s.categorie.includes(name)).length;

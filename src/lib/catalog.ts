@@ -4,7 +4,7 @@ import { promises as fs } from "fs";
 import { execFile } from "child_process";
 import path from "path";
 import type { Catalog, Category } from "../types";
-import { PLACEMENTS } from "./settings";
+import { PLACEMENTS, SITE_ORDERS } from "./settings";
 
 const FILE = path.join(process.cwd(), "data", "catalog.json");
 const MAX_THUMB_CHARS = 1_500_000; // circa 1 MB di immagine in base64
@@ -72,6 +72,7 @@ export function writesEnabled(): boolean {
 // impostazioni del sito: titolo, descrizione e posizione validi
 export function validSettingsPatch(body: Record<string, unknown>): string | null {
   if (body.placement !== undefined && !PLACEMENTS.some((p) => p.value === body.placement)) return "posizione non valida";
+  if (body.siteOrder !== undefined && !SITE_ORDERS.some((o) => o.value === body.siteOrder)) return "ordine non valido";
   return null;
 }
 

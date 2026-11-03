@@ -6,7 +6,7 @@ import type { Plugin } from "vite";
 import { parseUrl, readCatalog, uniqueSlug, validCategories, validSettingsPatch, validThumb, writeCatalog, writesEnabled } from "../src/lib/catalog";
 import { ICON_NAMES } from "../src/lib/categoryIcons";
 import { fetchFavicon } from "../src/lib/favicon";
-import { DEFAULT_SETTINGS, type Placement } from "../src/lib/settings";
+import { DEFAULT_SETTINGS, type Placement, type SiteOrder } from "../src/lib/settings";
 import { captureThumbnail } from "../src/lib/thumbnail";
 import type { Category, Site } from "../src/types";
 
@@ -168,7 +168,10 @@ async function updateSettings(req: IncomingMessage, res: ServerResponse) {
   if (error) return send(res, 400, { error });
   const catalog = await readCatalog();
   const current = { ...DEFAULT_SETTINGS, ...catalog.settings };
-  catalog.settings = { placement: (body.placement as Placement) ?? current.placement };
+  catalog.settings = {
+    placement: (body.placement as Placement) ?? current.placement,
+    siteOrder: (body.siteOrder as SiteOrder) ?? current.siteOrder,
+  };
   await writeCatalog(catalog);
   send(res, 200, catalog.settings);
 }

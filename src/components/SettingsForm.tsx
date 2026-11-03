@@ -8,7 +8,7 @@ import { SiteTile } from "@/components/SiteTile";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { exportLinks } from "@/lib/exportLinks";
-import { PLACEMENTS, type Placement, type SiteSettings } from "@/lib/settings";
+import { PLACEMENTS, SITE_ORDERS, type Placement, type SiteOrder, type SiteSettings } from "@/lib/settings";
 import type { CategoryInfo, Site } from "@/types";
 
 const SAMPLE_CATEGORY: CategoryInfo = { name: "Utili", color: "#34d399", icon: "Wrench" };
@@ -24,6 +24,7 @@ const SAMPLE_SITE: Site = {
 
 export function SettingsForm({ initial, categories: initialCategories, sites }: { initial: SiteSettings; categories: CategoryInfo[]; sites: Site[] }) {
   const [placement, setPlacement] = useState<Placement>(initial.placement);
+  const [siteOrder, setSiteOrder] = useState<SiteOrder>(initial.siteOrder);
   const [categories, setCategories] = useState<CategoryInfo[]>(initialCategories);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [newName, setNewName] = useState("");
@@ -38,7 +39,7 @@ export function SettingsForm({ initial, categories: initialCategories, sites }: 
       const res = await fetch("/api/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ placement }),
+        body: JSON.stringify({ placement, siteOrder }),
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) throw new Error(data.error || "HTTP " + res.status);
@@ -108,6 +109,19 @@ export function SettingsForm({ initial, categories: initialCategories, sites }: 
                 aria-pressed={placement === p.value}
                 className={"rounded-lg border px-3 py-2 text-left text-sm " + (placement === p.value ? "border-foreground" : "border-border text-muted-foreground")}>
                 {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label>Ordine dei siti nelle categorie (i pinnati restano in alto)</Label>
+          <div className="flex flex-col gap-2">
+            {SITE_ORDERS.map((o) => (
+              <button key={o.value} type="button" onClick={() => setSiteOrder(o.value)}
+                aria-pressed={siteOrder === o.value}
+                className={"rounded-lg border px-3 py-2 text-left text-sm " + (siteOrder === o.value ? "border-foreground" : "border-border text-muted-foreground")}>
+                {o.label}
               </button>
             ))}
           </div>
