@@ -228,7 +228,7 @@ export function HomeView({ catalog }: { catalog: Catalog }) {
                     <ContextMenuSeparator />
                     <ContextMenuGroup>
                       <ContextMenuLabel>Categorie</ContextMenuLabel>
-                      {categories.map((c) => (
+                      {[...categories].sort((a, b) => a.name.localeCompare(b.name, "it", { sensitivity: "base" })).map((c) => (
                         <ContextMenuCheckboxItem
                           key={c.name}
                           checked={s.categorie.includes(c.name)}
